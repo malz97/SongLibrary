@@ -1,4 +1,5 @@
-package app;
+package songlib.app;
+
 
 public class Song {
 
