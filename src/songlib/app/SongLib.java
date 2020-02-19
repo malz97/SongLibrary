@@ -14,7 +14,7 @@ public class SongLib extends Application{
 	public void start(Stage primaryStage)
 	throws IOException {
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("songlib/view/SongLibrary.fxml"));
+		loader.setLocation(getClass().getResource("songlib/view/layout.fxml"));
 		GridPane root = (GridPane)loader.load();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);

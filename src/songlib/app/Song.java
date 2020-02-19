@@ -18,11 +18,11 @@ public class Song {
     }
 
     public Song (String name, String artist, int year) {
-        this(name, artist, null, year);
+        this(name, artist, "", year);
     }
 
     public Song (String name, String artist) {
-        this(name, artist, null, 0);
+        this(name, artist, "", 0);
     }
 
     public String getName() {
@@ -72,11 +72,11 @@ public class Song {
     }
 
     public String toString() {
-        if(year == 0 && album == null) {
+        if(year == 0 && album.equals("")) {
             return name + " by " + artist;
-        }else if (year == 0 && album != null) {
+        }else if (year == 0 && !album.equals("")) {
             return name + " by " + artist + " (" + album + ")";
-        }else if (year != 0 && album == null) {
+        }else if (year != 0 && album.equals("")) {
             return name + " by " + artist + " (" + year + ")";
         }
         return name + " by " + artist 
