@@ -16,7 +16,7 @@ public class SongLib extends Application{
 	throws IOException {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(
-				getClass().getResource("/songlib/view/test.fxml"));
+				getClass().getResource("/songlib/view/layout.fxml"));
 		AnchorPane root = (AnchorPane)loader.load();
 		
 		Controller controller = loader.getController();
