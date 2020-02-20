@@ -69,15 +69,30 @@ public class Controller {
 	@FXML
 	private void addSong(ActionEvent e) {
 		String name, artist;
+		name = nameField.getText();
+		artist = artistField.getText();
+		Song s = new Song(name, artist);
+		obsList.add(s);
 		
 	}
 	@FXML
 	private void editSong(ActionEvent e) {
-		artistField.setText("Working!");
+		int index = listView.getSelectionModel().getSelectedIndex();
+		Song s = obsList.get(index);
+		s.setName(nameField.getText());
+		s.setArtist(artistField.getText());
+		if(!albumField.getText().isEmpty()) {
+			s.setAlbum(albumField.getText());
+		}
+		if(!yearField.getText().isEmpty()) {
+			s.setYear(Integer.parseInt(yearField.getText()));
+		}
+		obsList.set(index, s);
 	}
 	@FXML
 	private void deleteSong(ActionEvent e) {
-		albumField.setText("Working!");
+		int index = listView.getSelectionModel().getSelectedIndex();
+		obsList.remove(index);
 	}
 	
 }
