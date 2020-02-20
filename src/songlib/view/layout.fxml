@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" 
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="600" prefWidth="650" 
+	xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="songlib.view.Controller">
+   <children>
+      <ListView
+	fx:id="listView" 
+	layoutX="14.0" layoutY="14.0" 
+	prefHeight="305.0" prefWidth="386.0">
+      </ListView>
+      <TextField fx:id="nameField" layoutX="424.0" layoutY="33.0" promptText="Song" />
+      <TextField fx:id="artistField" layoutX="424.0" layoutY="77.0" promptText="Artist" />
+      <TextField fx:id="albumField" layoutX="424.0" layoutY="122.0" promptText="Album " />
+      <TextField fx:id="yearField" layoutX="424.0" layoutY="166.0" promptText="Year" />
+      <Button fx:id="add" onAction="#addSong" layoutX="443.0" layoutY="200.0" mnemonicParsing="false" text="Add" />
+      <Button fx:id="edit" onAction="#editSong" layoutX="499.0" layoutY="200.0" mnemonicParsing="false" text="Edit" />
+      <Button fx:id="delete" onAction="#deleteSong" layoutX="181.0" layoutY="333.0" mnemonicParsing="false" text="Delete" />
+   </children>
+</AnchorPane>
