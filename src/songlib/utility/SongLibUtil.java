@@ -1,54 +1,38 @@
 package songlib.utility;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-
 import songlib.app.Song;
 
-public class SongLibUtil {
+public class SongUtility {
 	
-	public static ArrayList<Song> getSongsFromFile(String file) {
+	public static ArrayList<Song> loadToList(String file) {
 		
-		ArrayList<Song> songlist = new ArrayList<Song>();
-		BufferedReader br = null;
+		ArrayList<Song> list = new ArrayList<Song>();
 		String line = "";
-		String cvsSplit = ",";
+		String splitTok = ",";
 		
-		try {
-			
-			br = new BufferedReader(new FileReader(file));
-			line = br.readLine();
-			while(line != null) {
-				String[] temp = line.split(cvsSplit);
-				Song song = new Song(temp[0], temp[1], "", 0);
-				//Checks if an album was input
-				if(!temp[2].equals("")) {
-					song.setAlbum(temp[2]);
+		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+			while((line = br.readLine()) != null) {
+				String[] tmp = line.split(splitTok);
+				Song s = new Song(tmp[0], tmp[1]);
+				if(tmp.length > 2) {
+					//Check if album had been entered
+					if(!tmp[2].equals("")) {
+						s.setAlbum(tmp[2]);
+					}
+					//Check if year had been entered
+					if(!tmp[3].equals("")) {
+						int year = Integer.parseInt(tmp[3]);
+						s.setYear(year);
+					}
 				}
-				//Checks if a year was input
-				if(!temp[3].equals("")) {
-					Integer year = Integer.parseInt(temp[3]);
-					song.setYear(year);
-				}
-				//Adds song to songlist arrayList
-				songlist.add(song);
+				list.add(s);
 			}
-		} catch (FileNotFoundException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
-		return songlist;
+		return list;
 	}
 }
