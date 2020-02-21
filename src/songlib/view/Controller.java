@@ -75,15 +75,19 @@ public class Controller {
 		if(result.orElse(null) == ButtonType.OK) {
 			// User confirmed their action.
 			String name, artist, album;
-			int year;
+			int year = 0;
 			name = nameField.getText();
 			artist = artistField.getText();
 			album = albumField.getText();
 			if(!yearField.getText().isEmpty()) {
-				year = Integer.parseInt(yearField.getText());
-				// TODO: Check if yearField contains only numbers.
-			} else {
-				year = 0;
+				try {
+					year = Integer.parseInt(yearField.getText());
+				} catch (NumberFormatException nfe)  {
+					// TODO: Alert user that yearField contains some non-empty non-number.
+				}
+				if(year <= 0) {
+					// TODO: Alert user that yearField contains a non-positive number.
+				}
 			}
 			Song s = new Song(name, artist, album, year);
 			obsList.add(s);
@@ -110,7 +114,14 @@ public class Controller {
 				s.setAlbum(albumField.getText());
 			}
 			if(!yearField.getText().isEmpty()) {
-				s.setYear(Integer.parseInt(yearField.getText()));
+				try {
+					s.setYear(Integer.parseInt(yearField.getText()));
+				} catch (NumberFormatException nfe)  {
+					// TODO: Alert user that yearField contains some non-empty non-number.
+				}
+				if(s.getYear() <= 0) {
+					// TODO: Alert user that yearField contains a non-positive number.
+				}
 			} else {
 				s.setYear(0);
 			}
