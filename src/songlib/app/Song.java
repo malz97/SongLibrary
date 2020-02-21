@@ -72,14 +72,6 @@ public class Song {
     }
 
     public String toString() {
-        if(year == 0 && album.equals("")) {
-            return name + " by " + artist;
-        }else if (year == 0 && !album.equals("")) {
-            return name + " by " + artist + " (" + album + ")";
-        }else if (year != 0 && album.equals("")) {
-            return name + " by " + artist + " (" + year + ")";
-        }
-        return name + " by " + artist 
-        + " (" + album +", " + year + ")";
+        return name + " by " + artist;
     }
 }
