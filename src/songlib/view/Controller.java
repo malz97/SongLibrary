@@ -149,7 +149,7 @@ public class Controller {
 	}
 
 	private void sortList() {
-		obsList.sort((s1, s2) -> s1.getName().compareToIgnoreCase(s2.getName()));
+		obsList.sort((s1, s2) -> (s1.getName() + s1.getArtist()).compareToIgnoreCase(s2.getName() + s2.getArtist()));
 	}
 	
 }
