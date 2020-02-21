@@ -22,9 +22,11 @@ public class SongLib extends Application{
 		Controller controller = loader.getController();
 		controller.start(primaryStage);
 		
-		Scene scene = new Scene(root, 600, 450);
+		Scene scene = new Scene(root);
 		primaryStage.setTitle("Song Library");
 		primaryStage.setScene(scene);
+		primaryStage.setResizable(false);
+		primaryStage.sizeToScene();
 		primaryStage.show();
 	}
 	
