@@ -1,5 +1,6 @@
 package songlib.view;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -46,6 +47,10 @@ public class Controller {
 			edit.setDisable(false);
 			delete.setDisable(false);
 			showSong(mainStage);
+		}else {
+			//List is empty at start, edit and delete not valid
+			edit.setDisable(true);
+			delete.setDisable(true);
 		}
 		//Adding a listener for the list view items
 		listView
@@ -54,9 +59,6 @@ public class Controller {
 			.addListener(
 					(obs, oldVal, newVal) ->
 						showSong(mainStage));
-		//List is empty at start, edit and delete not valid
-		edit.setDisable(true);
-		delete.setDisable(true);
 	}
 	
 	private void showSong(Stage mainStage) {
@@ -132,7 +134,7 @@ public class Controller {
 				invalid.showAndWait();
 				return;
 			}
-			//Checks for duplicates
+			//Checks for duplicates 
 			for(Song x : obsList) {
 				if(x.equals(s)) {
 					Alert duplicate = new Alert(AlertType.ERROR);
@@ -143,9 +145,15 @@ public class Controller {
 					return;
 				}
 			}
+		
 			//Song is added to list, and sort
 			obsList.add(s);
 			sortList();
+			try {
+				SongUtility.save(obsList);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
 			//Added song is automatically selected
 			int index = obsList.indexOf(s);
 			listView.getSelectionModel().select(index);
@@ -169,9 +177,7 @@ public class Controller {
 			// User confirmed their action.
 			int index = listView.getSelectionModel().getSelectedIndex();
 			Song s = obsList.get(index);
-			s.setName(nameField.getText());
-			s.setArtist(artistField.getText());
-			if(s.getName().isEmpty() || s.getArtist().isEmpty()) {
+			if(nameField.getText().isEmpty() || artistField.getText().isEmpty()) {
 				Alert invalid = new Alert(AlertType.ERROR);
 				invalid.setTitle("Error!");
 				invalid.setHeaderText("Invalid input error!");
@@ -179,6 +185,8 @@ public class Controller {
 				invalid.showAndWait();
 				return;
 			}
+			s.setName(nameField.getText());
+			s.setArtist(artistField.getText());
 			if(!albumField.getText().isEmpty()) {
 				s.setAlbum(albumField.getText());
 			}
@@ -218,6 +226,11 @@ public class Controller {
 			
 			obsList.set(index, s);
 			sortList();
+			try {
+				SongUtility.save(obsList);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
 		} else {
 			// User canceled their action.
 			return;
@@ -238,6 +251,11 @@ public class Controller {
 			int index = listView.getSelectionModel().getSelectedIndex();
 			obsList.remove(index);
 			listView.getSelectionModel().select(index);
+			try {
+				SongUtility.save(obsList);
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
 		} else {
 			return;
 		}
