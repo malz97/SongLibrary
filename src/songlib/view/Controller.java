@@ -12,6 +12,7 @@ import javafx.scene.effect.ImageInput;
 import javafx.stage.Stage;
 import songlib.app.Song;
 import songlib.utility.SongUtility;
+import static java.util.Comparator.comparing;
 
 public class Controller {
 	
@@ -30,6 +31,7 @@ public class Controller {
 		//Loading songs from a csv file to obsList
 		obsList = FXCollections.observableArrayList(
 				SongUtility.loadToList("src/songlib/utility/songs.csv"));
+		sortList();
 		listView.setItems(obsList);
 		//Initially select the first item in the list
 		listView.getSelectionModel().select(0);
@@ -70,7 +72,7 @@ public class Controller {
 		alert.setHeaderText("You clicked Add.");
 		alert.setContentText("Are you sure you'd like to add this song to your library?");
 		Optional<ButtonType> result = alert.showAndWait();
-		if(result.get() == ButtonType.OK) {
+		if(result.orElse(null) == ButtonType.OK) {
 			// User confirmed their action.
 			String name, artist, album;
 			int year;
@@ -85,6 +87,7 @@ public class Controller {
 			}
 			Song s = new Song(name, artist, album, year);
 			obsList.add(s);
+			sortList();
 		} else {
 			// User canceled their action.
 			showSong();
@@ -97,7 +100,7 @@ public class Controller {
 		alert.setHeaderText("You clicked Edit.");
 		alert.setContentText("Are you sure you'd like to edit this song's details? This action cannot be undone.");
 		Optional<ButtonType> result = alert.showAndWait();
-		if(result.get() == ButtonType.OK) {
+		if(result.orElse(null) == ButtonType.OK) {
 			// User confirmed their action.
 			int index = listView.getSelectionModel().getSelectedIndex();
 			Song s = obsList.get(index);
@@ -112,6 +115,7 @@ public class Controller {
 				s.setYear(0);
 			}
 			obsList.set(index, s);
+			sortList();
 		} else {
 			// User canceled their action.
 			showSong();
@@ -124,13 +128,17 @@ public class Controller {
 		alert.setHeaderText("You clicked Delete.");
 		alert.setContentText("Are you sure you'd like to delete the selected song from your library? This action cannot be undone.");
 		Optional<ButtonType> result = alert.showAndWait();
-		if(result.get() == ButtonType.OK) {
+		if(result.orElse(null) == ButtonType.OK) {
 			// User confirmed their action.
 			int index = listView.getSelectionModel().getSelectedIndex();
 			obsList.remove(index);
 		} else {
 			// User canceled their action.
 		}
+	}
+
+	private void sortList() {
+		obsList.sort(comparing(Song::getName));
 	}
 	
 }
