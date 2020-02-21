@@ -1,6 +1,5 @@
 package songlib.app;
 
-
 public class Song {
 
     private String name, artist, album;
@@ -68,7 +67,7 @@ public class Song {
         }
 
         Song song = (Song) o;
-        return name.equals(song.name) && artist.equals(song.artist);
+        return name.equalsIgnoreCase(song.name) && artist.equalsIgnoreCase(song.artist);
     }
 
     public String toString() {
