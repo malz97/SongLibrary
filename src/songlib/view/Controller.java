@@ -1,5 +1,6 @@
 package songlib.view;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
@@ -27,16 +28,23 @@ public class Controller {
 	
 	
 	private ObservableList<Song> obsList;
+	public static final String FILE = "songs.csv";
 	
 	public void start(Stage mainStage) {
 		//Creating an ObservableList from ArrayList
 		//Loading songs from a csv file to obsList
-		obsList = FXCollections.observableArrayList();
+		try {
+			obsList = FXCollections.observableArrayList(SongUtility.loadToList(FILE));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		listView.setItems(obsList);
 		//Initially select the first item in the list
 		//Display song information
 		if(!obsList.isEmpty()) {
 			listView.getSelectionModel().select(0);
+			edit.setDisable(false);
+			delete.setDisable(false);
 			showSong(mainStage);
 		}
 		//Adding a listener for the list view items
@@ -52,15 +60,17 @@ public class Controller {
 	}
 	
 	private void showSong(Stage mainStage) {
-		Song s = listView.getSelectionModel().getSelectedItem();
 		//Set text fields to blank if list is empty
-		if(s == null) {
+		if(obsList.isEmpty()) {
 			nameField.clear();
 			artistField.clear();
 			albumField.clear();
 			yearField.clear();
+			edit.setDisable(true);
+			delete.setDisable(true);
 			return;
 		}
+		Song s = listView.getSelectionModel().getSelectedItem();
 		nameField.setText(s.getName());
 		artistField.setText(s.getArtist());
 		if(!s.getAlbum().equals("")) {
@@ -115,7 +125,12 @@ public class Controller {
 			Song s = new Song(name, artist, album, year);
 			//Checks if song has name and artist
 			if(s.getName().isEmpty() || s.getArtist().isEmpty()) {
-				// TODO: Alert user, song doesn't have song or artist
+				Alert invalid = new Alert(AlertType.ERROR);
+				invalid.setTitle("Error!");
+				invalid.setHeaderText("Invalid input error!");
+				invalid.setContentText("Must enter song and artist name!");
+				invalid.showAndWait();
+				return;
 			}
 			//Checks for duplicates
 			for(Song x : obsList) {
@@ -149,15 +164,25 @@ public class Controller {
 		alert.setHeaderText("You clicked Edit.");
 		alert.setContentText("Are you sure you'd like to edit this song's details? This action cannot be undone.");
 		Optional<ButtonType> result = alert.showAndWait();
+		Song old = listView.getSelectionModel().getSelectedItem();
 		if(result.orElse(null) == ButtonType.OK) {
 			// User confirmed their action.
 			int index = listView.getSelectionModel().getSelectedIndex();
 			Song s = obsList.get(index);
 			s.setName(nameField.getText());
 			s.setArtist(artistField.getText());
+			if(s.getName().isEmpty() || s.getArtist().isEmpty()) {
+				Alert invalid = new Alert(AlertType.ERROR);
+				invalid.setTitle("Error!");
+				invalid.setHeaderText("Invalid input error!");
+				invalid.setContentText("Must enter song and artist name!");
+				invalid.showAndWait();
+				return;
+			}
 			if(!albumField.getText().isEmpty()) {
 				s.setAlbum(albumField.getText());
 			}
+			//Checks if song has name and artist
 			if(!yearField.getText().isEmpty()) {
 				try {
 					s.setYear(Integer.parseInt(yearField.getText()));
@@ -177,17 +202,20 @@ public class Controller {
 				}
 			} else {
 				s.setYear(0);
-			}//Checks for duplicates
-			for(Song x : obsList) {
-				if(x.equals(s)) {
-					Alert duplicate = new Alert(AlertType.ERROR);
-					duplicate.setTitle("Error!");
-					duplicate.setHeaderText("Duplicate error!");
-					duplicate.setContentText("Song is already contained in the library!");
-					duplicate.showAndWait();
-					return;
-				}
 			}
+			
+			//Checks for duplicates
+//			if(s.equals(old)) {
+//					Alert duplicate = new Alert(AlertType.ERROR);
+//					duplicate.setTitle("Error!");
+//					duplicate.setHeaderText("Duplicate error!");
+//					duplicate.setContentText("Song is already contained in the library!");
+//					duplicate.showAndWait();
+//					System.out.println(s.getArtist());
+//					System.out.println(old.getArtist());
+//					return;
+//			}
+			
 			obsList.set(index, s);
 			sortList();
 		} else {
