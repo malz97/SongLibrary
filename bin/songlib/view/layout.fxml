@@ -3,16 +3,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="336.0" prefWidth="650" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="songlib.view.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="258.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="songlib.view.Controller">
    <children>
-      <ListView fx:id="listView" layoutX="14.0" layoutY="14.0" prefHeight="305.0" prefWidth="386.0">
+      <ListView fx:id="listView" layoutX="14.0" layoutY="14.0" prefHeight="229.0" prefWidth="386.0">
       </ListView>
-      <TextField fx:id="nameField" layoutX="424.0" layoutY="33.0" promptText="Song" />
-      <TextField fx:id="artistField" layoutX="424.0" layoutY="77.0" promptText="Artist" />
-      <TextField fx:id="albumField" layoutX="424.0" layoutY="122.0" promptText="Album " />
-      <TextField fx:id="yearField" layoutX="424.0" layoutY="166.0" promptText="Year" />
+      <TextField fx:id="nameField" layoutX="424.0" layoutY="29.0" promptText="Song" />
+      <TextField fx:id="artistField" layoutX="424.0" layoutY="71.0" promptText="Artist" />
+      <TextField fx:id="albumField" layoutX="424.0" layoutY="113.0" promptText="Album " />
+      <TextField fx:id="yearField" layoutX="424.0" layoutY="155.0" promptText="Year" />
       <Button fx:id="add" layoutX="424.0" layoutY="200.0" mnemonicParsing="false" onAction="#addSong" text="Add" />
-      <Button fx:id="edit" layoutX="478.0" layoutY="200.0" mnemonicParsing="false" onAction="#editSong" text="Edit" />
+      <Button fx:id="edit" layoutX="478.5" layoutY="200.0" mnemonicParsing="false" onAction="#editSong" text="Edit" />
       <Button fx:id="delete" layoutX="531.0" layoutY="200.0" mnemonicParsing="false" onAction="#deleteSong" text="Delete" />
    </children>
 </AnchorPane>
