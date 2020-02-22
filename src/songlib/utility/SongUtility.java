@@ -24,16 +24,14 @@ public class SongUtility {
 			while((line = br.readLine()) != null) {
 				String[] tmp = line.split(splitTok);
 				Song s = new Song(tmp[0], tmp[1]);
-				if(tmp.length > 2) {
-					//Check if album had been entered
-					if(!tmp[2].equals("")) {
-						s.setAlbum(tmp[2]);
-					}
-					//Check if year had been entered
-					if(!tmp[3].equals("")) {
-						int year = Integer.parseInt(tmp[3]);
-						s.setYear(year);
-					}
+				// Check if album had been entered
+				if(!tmp[2].equals("")) {
+					s.setAlbum(tmp[2]);
+				}
+				// Check if year had been entered
+				if(!tmp[3].equals("")) {
+					int year = Integer.parseInt(tmp[3]);
+					s.setYear(year);
 				}
 				list.add(s);
 			}
@@ -54,14 +52,9 @@ public class SongUtility {
 			sb.append(",");
 			sb.append(s.getArtist());
 			sb.append(",");
-			if(!s.getAlbum().isEmpty()) {
-				sb.append(s.getAlbum());
-				sb.append(",");
-			}
-			if(s.getYear() > 0) {
-				sb.append(String.valueOf(s.getYear()));
-				sb.append(",");
-			}
+			sb.append(s.getAlbum());
+			sb.append(",");
+			sb.append(String.valueOf(s.getYear()));
 			sb.append('\n');
 //			System.out.println(sb.toString());
 			writer.write(sb.toString());
