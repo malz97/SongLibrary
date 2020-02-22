@@ -1,3 +1,4 @@
+//Mohammed Al-Zouibi (ma1302) and Sakib Rasul (sar370)
 package songlib.view;
 
 import java.io.FileNotFoundException;
@@ -103,15 +104,15 @@ public class Controller {
 			// User confirmed their action.
 			String name, artist, album = "";
 			int year = 0;
-			name = nameField.getText();
-			artist = artistField.getText();
+			name = nameField.getText().trim();
+			artist = artistField.getText().trim();
 			if(!albumField.getText().isEmpty()) {
-				album = albumField.getText();
+				album = albumField.getText().trim();
 			}
 			if(!yearField.getText().isEmpty()) {
 				System.out.println("getting year");
 				try {
-					year = Integer.parseInt(yearField.getText());
+					year = Integer.parseInt(yearField.getText().trim());
 					System.out.println("year is " + year);
 				} catch (NumberFormatException nfe)  {
 					Alert formatError = new Alert(AlertType.ERROR);
@@ -200,17 +201,17 @@ public class Controller {
 				showSong();
 				return;
 			}
-			name = nameField.getText();
+			name = nameField.getText().trim();
 			proposedSong.setName(name);
-			artist = artistField.getText();
+			artist = artistField.getText().trim();
 			proposedSong.setArtist(artist);
 			if(!albumField.getText().isEmpty()) {
-				album = albumField.getText();
+				album = albumField.getText().trim();
 				proposedSong.setAlbum(album);
 			}
 			if(!yearField.getText().isEmpty()) {
 				try {
-					year = Integer.parseInt(yearField.getText());
+					year = Integer.parseInt(yearField.getText().trim());
 				} catch (NumberFormatException nfe)  {
 					Alert formatError = new Alert(AlertType.ERROR);
 					formatError.setTitle("Error!");
