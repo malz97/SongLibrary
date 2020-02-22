@@ -1,3 +1,4 @@
+//Mohammed Al-Zouibi (ma1302) and Sakib Rasul (sar370)
 package songlib.app;
 
 public class Song {
@@ -6,9 +7,9 @@ public class Song {
     private int year;
 
     public Song (String name, String artist, String album, int year) {
-        this.name = name;
-        this.artist = artist;
-        this.album = album;
+        this.name = name.trim();
+        this.artist = artist.trim();
+        this.album = album.trim();
         this.year = year;
     }
 
@@ -67,7 +68,7 @@ public class Song {
         }
 
         Song song = (Song) o;
-        return name.equalsIgnoreCase(song.name) && artist.equalsIgnoreCase(song.artist);
+        return name.equalsIgnoreCase(song.name.trim()) && artist.equalsIgnoreCase(song.artist.trim());
     }
 
     public String toString() {
