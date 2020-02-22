@@ -63,7 +63,7 @@ public class SongUtility {
 				sb.append(",");
 			}
 			sb.append('\n');
-			System.out.println(sb.toString());
+//			System.out.println(sb.toString());
 			writer.write(sb.toString());
 		}
 		writer.flush();

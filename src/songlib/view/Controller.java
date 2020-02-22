@@ -2,6 +2,7 @@ package songlib.view;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
@@ -30,7 +31,7 @@ public class Controller {
 	
 	private ObservableList<Song> obsList;
 	public static final String FILE = "songs.csv";
-	
+
 	public void start(Stage mainStage) {
 		//Creating an ObservableList from ArrayList
 		//Loading songs from a csv file to obsList
@@ -46,7 +47,7 @@ public class Controller {
 			listView.getSelectionModel().select(0);
 			edit.setDisable(false);
 			delete.setDisable(false);
-			showSong(mainStage);
+			showSong();
 		}else {
 			//List is empty at start, edit and delete not valid
 			edit.setDisable(true);
@@ -57,11 +58,12 @@ public class Controller {
 			.getSelectionModel()
 			.selectedIndexProperty()
 			.addListener(
-					(obs, oldVal, newVal) ->
-						showSong(mainStage));
+					(obs, oldVal, newVal) -> showSong()
+			);
 	}
 	
-	private void showSong(Stage mainStage) {
+	private void showSong() {
+//		System.out.println("Detected change!");
 		//Set text fields to blank if list is empty
 		if(obsList.isEmpty()) {
 			nameField.clear();
@@ -79,13 +81,13 @@ public class Controller {
 			albumField.setText(s.getAlbum());
 		}else {
 			albumField.clear();
-			albumField.setPromptText("No year information");
+			albumField.setPromptText("No album information");
 		}
 		if(s.getYear() > 0) {
 			yearField.setText(String.valueOf(s.getYear()));
 		}else {
 			yearField.clear();
-			yearField.setPromptText("No album information");
+			yearField.setPromptText("No year information");
 		}
 	}
 	
@@ -107,14 +109,17 @@ public class Controller {
 				album = albumField.getText();
 			}
 			if(!yearField.getText().isEmpty()) {
+				System.out.println("getting year");
 				try {
 					year = Integer.parseInt(yearField.getText());
+					System.out.println("year is " + year);
 				} catch (NumberFormatException nfe)  {
 					Alert formatError = new Alert(AlertType.ERROR);
 					formatError.setTitle("Error!");
 					formatError.setHeaderText("Invalid format error!");
 					formatError.setContentText("Input in year field not a number!");
 					formatError.showAndWait();
+					showSong();
 					return;
 				}
 				if(year <= 0) {
@@ -122,6 +127,9 @@ public class Controller {
 					negativeYear.setTitle("Error!");
 					negativeYear.setHeaderText("Invalid format error!");
 					negativeYear.setContentText("Input in year field not a valid year!");
+					negativeYear.showAndWait();
+					showSong();
+					return;
 				}
 			}
 			Song s = new Song(name, artist, album, year);
@@ -132,9 +140,10 @@ public class Controller {
 				invalid.setHeaderText("Invalid input error!");
 				invalid.setContentText("Must enter song and artist name!");
 				invalid.showAndWait();
+				showSong();
 				return;
 			}
-			//Checks for duplicates 
+			//Checks for duplicates
 			for(Song x : obsList) {
 				if(x.equals(s)) {
 					Alert duplicate = new Alert(AlertType.ERROR);
@@ -142,10 +151,11 @@ public class Controller {
 					duplicate.setHeaderText("Duplicate error!");
 					duplicate.setContentText("Song is already contained in the library!");
 					duplicate.showAndWait();
+					showSong();
 					return;
 				}
 			}
-		
+
 			//Song is added to list, and sort
 			obsList.add(s);
 			sortList();
@@ -167,64 +177,78 @@ public class Controller {
 	}
 	@FXML
 	private void editSong(ActionEvent e) {
+		String name, artist, album = "";
+		int year = 0;
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation Dialog");
 		alert.setHeaderText("You clicked Edit.");
 		alert.setContentText("Are you sure you'd like to edit this song's details? This action cannot be undone.");
 		Optional<ButtonType> result = alert.showAndWait();
-		Song old = listView.getSelectionModel().getSelectedItem();
+		int currentIndex = listView.getSelectionModel().getSelectedIndex();
+		Song currentSong = listView.getSelectionModel().getSelectedItem();
+		Song proposedSong = new Song("", "");
+
 		if(result.orElse(null) == ButtonType.OK) {
 			// User confirmed their action.
-			int index = listView.getSelectionModel().getSelectedIndex();
-			Song s = obsList.get(index);
+			// Check if song has name and artist
 			if(nameField.getText().isEmpty() || artistField.getText().isEmpty()) {
 				Alert invalid = new Alert(AlertType.ERROR);
 				invalid.setTitle("Error!");
 				invalid.setHeaderText("Invalid input error!");
 				invalid.setContentText("Must enter song and artist name!");
 				invalid.showAndWait();
+				showSong();
 				return;
 			}
-			s.setName(nameField.getText());
-			s.setArtist(artistField.getText());
+			name = nameField.getText();
+			proposedSong.setName(name);
+			artist = artistField.getText();
+			proposedSong.setArtist(artist);
 			if(!albumField.getText().isEmpty()) {
-				s.setAlbum(albumField.getText());
+				album = albumField.getText();
+				proposedSong.setAlbum(album);
 			}
-			//Checks if song has name and artist
 			if(!yearField.getText().isEmpty()) {
 				try {
-					s.setYear(Integer.parseInt(yearField.getText()));
+					year = Integer.parseInt(yearField.getText());
 				} catch (NumberFormatException nfe)  {
 					Alert formatError = new Alert(AlertType.ERROR);
 					formatError.setTitle("Error!");
 					formatError.setHeaderText("Invalid format error!");
 					formatError.setContentText("Input in year field not a number!");
 					formatError.showAndWait();
+					showSong();
 					return;
 				}
-				if(s.getYear() <= 0) {
+				if(year <= 0) {
 					Alert negativeYear = new Alert(AlertType.ERROR);
 					negativeYear.setTitle("Error!");
 					negativeYear.setHeaderText("Invalid format error!");
 					negativeYear.setContentText("Input in year field not a valid year!");
+					negativeYear.showAndWait();
+					showSong();
+					return;
 				}
 			} else {
-				s.setYear(0);
+				year = 0;
 			}
-			
-			//Checks for duplicates
-//			if(s.equals(old)) {
-//					Alert duplicate = new Alert(AlertType.ERROR);
-//					duplicate.setTitle("Error!");
-//					duplicate.setHeaderText("Duplicate error!");
-//					duplicate.setContentText("Song is already contained in the library!");
-//					duplicate.showAndWait();
-//					System.out.println(s.getArtist());
-//					System.out.println(old.getArtist());
-//					return;
-//			}
-			
-			obsList.set(index, s);
+			proposedSong.setYear(year);
+
+//			Checks for duplicates
+			for(Song x : obsList) {
+				if(x.equals(proposedSong) && obsList.indexOf(x) != currentIndex) {
+					Alert duplicate = new Alert(AlertType.ERROR);
+					duplicate.setTitle("Error!");
+					duplicate.setHeaderText("Duplicate error!");
+					duplicate.setContentText("Song is already contained in the library!");
+					duplicate.showAndWait();
+					showSong();
+					return;
+				}
+			}
+
+//			System.out.println("editing song!!");
+			obsList.set(currentIndex, proposedSong);
 			sortList();
 			try {
 				SongUtility.save(obsList);

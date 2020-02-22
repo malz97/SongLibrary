@@ -1,6 +1,7 @@
-# Default ignored files
 /workspace.xml
 /misc.xml
 /modules.xml
 /vcs.xml
 /libraries/lib.xml
+*.class
+songs.csv
